@@ -64,14 +64,15 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/songs-microservice:latest
 
   deploy:
-    needs: [ test, publish ]
+    needs: [ test, publish, snyk-docker-image, snyk-static-code ]
     runs-on: ubuntu-latest
     steps:
       - name: Finish
         run: echo "Finish deploying"
         shell: bash
 
-  snyk-docker-images:
+  snyk-docker-image:
+    needs: [ publish ]
     runs-on: ubuntu-latest
     permissions:
       security-events: write
@@ -94,6 +95,7 @@ jobs:
           sarif_file: snyk.sarif
 
   snyk-static-code:
+    needs: [ build ]
     runs-on: ubuntu-latest
     permissions:
       security-events: write

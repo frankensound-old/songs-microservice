@@ -1,17 +1,21 @@
-const {sendData} = require("./middleware/messaging.middleware")
-
+const {sendData} = require("./middleware/messaging")
 const service = require("../services/song.service")
 
 module.exports = {
-    allSongs: (req, res) => {
-        res.json(service.GetSongs());
+    getAll: (req, res) => {
+        res.json(service.GetAll())
     },
-    playSong: (req, res) => {
-        res.json(service.GetSongByTitle(req.params["id"]));
-        const data = {
-            profileId: "user",
-            songId: req.params["id"],
+    create: (req, res) => {
+        res.json(service.Create(req.body))
+    },
+    getKey: (req, res) => {
+        try {
+            res.json(service.GetKey(req.params["name"]))
+            const song = service.GetOne(req.params["name"])
+            res.status(200)
+            sendData({profileId: "user", songName: song.name})
+        } catch (e) {
+            console.log(e)
         }
-        sendData(data);
     }
 }

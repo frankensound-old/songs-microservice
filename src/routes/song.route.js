@@ -1,9 +1,10 @@
 const controller = require("../controllers/song.controller")
 const express = require('express')
 
-const router = express.Router();
+const router = express.Router()
 
-router.get('/:id', controller.playSong);
-router.get('/', controller.allSongs);
+router.get('/', controller.getAll)
+router.post('/', controller.create)
+router.get('/:name', controller.getKey)
 
-module.exports = router;
+module.exports = router
